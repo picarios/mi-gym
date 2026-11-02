@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <!-- viewport-fit=cover: usa toda la pantalla del iPhone, incluida la zona del notch -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0e1014">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Mi Gym">
+  <title>Mi Gym</title>
+  <!-- Para que se pueda instalar: el "manifiesto" y los íconos -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="iconos/icono-192.png">
+  <link rel="apple-touch-icon" href="iconos/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+  <!-- ============ PANTALLA 1: INICIO ============ -->
+  <section id="pantalla-inicio" class="pantalla">
+    <header class="cabecera">
+      <h1>Mi Gym</h1>
+    </header>
+
+    <div id="banner-en-curso" class="banner" hidden>
+      <div>
+        <strong>Entrenamiento sin terminar</strong>
+        <span id="banner-texto"></span>
+      </div>
+      <button id="btn-continuar" class="btn btn-primario">Continuar</button>
+    </div>
+
+    <button id="aviso-copia" class="aviso-copia" hidden>
+      Haz una copia de seguridad de tus datos →
+    </button>
+
+    <h2 class="titulo-seccion">¿Cuántos días entrenas por semana?</h2>
+    <div class="segmentado" id="selector-plan">
+      <button data-plan="4">4 días</button>
+      <button data-plan="3">3 días</button>
+      <button data-plan="2">2 días</button>
+    </div>
+
+    <h2 class="titulo-seccion">Elige el entrenamiento de hoy</h2>
+    <div id="lista-dias"></div>
+
+    <div id="tarjeta-copia" class="tarjeta tarjeta-copia">
+      <h2>Copia de seguridad</h2>
+      <p>El iPhone a veces borra los datos de las apps web. Guarda una copia
+        cada semana en Archivos o iCloud.</p>
+      <p id="copia-estado" class="copia-estado"></p>
+      <div class="botones-2">
+        <button id="btn-exportar" class="btn btn-primario">Exportar</button>
+        <button id="btn-importar" class="btn btn-secundario">Importar</button>
+      </div>
+      <!-- Selector de archivos escondido: lo abre el botón "Importar" -->
+      <input id="input-importar" type="file" accept=".json,application/json" hidden>
+    </div>
+
+    <p class="pie" id="contador-sesiones"></p>
+  </section>
+
+  <!-- ============ PANTALLA 2: ENTRENAMIENTO ============ -->
+  <section id="pantalla-entreno" class="pantalla" hidden>
+    <header class="cabecera-fija">
+      <button id="btn-atras" class="flecha" aria-label="Volver al inicio">‹</button>
+      <div class="cabecera-titulo">
+        <h1 id="entreno-titulo"></h1>
+        <span id="cronometro">0:00</span>
+      </div>
+      <button id="btn-terminar" class="btn btn-primario">Terminar</button>
+    </header>
+
+    <div id="lista-ejercicios"></div>
+
+    <button id="btn-descartar" class="btn-texto">Descartar entrenamiento</button>
+  </section>
+
+  <!-- ============ PANTALLA 3: RESUMEN ============ -->
+  <section id="pantalla-resumen" class="pantalla" hidden>
+    <header class="cabecera">
+      <h1>¡Buen trabajo!</h1>
+    </header>
+    <div id="resumen-contenido"></div>
+    <button id="btn-volver" class="btn btn-primario btn-ancho">Volver al inicio</button>
+  </section>
+
+  <!-- ============ PANTALLA 4: HISTORIAL ============ -->
+  <section id="pantalla-historial" class="pantalla" hidden>
+    <header class="cabecera">
+      <h1>Historial</h1>
+    </header>
+    <div id="lista-historial"></div>
+  </section>
+
+  <!-- ============ PANTALLA 5: PROGRESO ============ -->
+  <section id="pantalla-progreso" class="pantalla" hidden>
+    <header class="cabecera">
+      <h1>Progreso</h1>
+    </header>
+    <select id="selector-ejercicio" class="selector" aria-label="Ejercicio"></select>
+    <div class="segmentado segmentado-2" id="selector-medida">
+      <button data-medida="mejor">Peso máximo</button>
+      <button data-medida="volumen">Volumen</button>
+    </div>
+    <div id="progreso-contenido"></div>
+  </section>
+
+  <!-- ============ PANTALLA 6: COMIDA ============ -->
+  <section id="pantalla-comida" class="pantalla" hidden>
+    <header class="cabecera cabecera-dia">
+      <button id="comida-anterior" class="flecha" aria-label="Día anterior">‹</button>
+      <h1 id="comida-dia">Hoy</h1>
+      <button id="comida-siguiente" class="flecha" aria-label="Día siguiente">›</button>
+    </header>
+
+    <div id="tarjeta-proteina" class="tarjeta"></div>
+
+    <div class="titulo-con-boton">
+      <h2 class="titulo-seccion">Agregar rápido</h2>
+      <button id="btn-editar-lista" class="btn-link">Editar lista</button>
+    </div>
+    <div id="lista-rapida" class="rapidos"></div>
+    <button id="btn-otro-alimento" class="btn btn-secundario btn-ancho">+ Otro alimento</button>
+
+    <h2 class="titulo-seccion">Lo que comí</h2>
+    <div id="lo-que-comi"></div>
+  </section>
+
+  <!-- ============ PANTALLA 7: PESO CORPORAL ============ -->
+  <section id="pantalla-peso" class="pantalla" hidden>
+    <header class="cabecera">
+      <h1>Peso corporal</h1>
+    </header>
+    <div class="tarjeta form-peso">
+      <label class="campo">Peso (kg)
+        <input id="peso-kg" inputmode="decimal" placeholder="94">
+      </label>
+      <label class="campo">Fecha
+        <input id="peso-fecha" type="date">
+      </label>
+      <button id="btn-guardar-peso" class="btn btn-primario">Guardar</button>
+    </div>
+    <div id="peso-contenido"></div>
+  </section>
+
+  <!-- ============ PANTALLA 8: RESUMEN SEMANAL ============ -->
+  <section id="pantalla-semana" class="pantalla" hidden>
+    <header class="cabecera cabecera-dia">
+      <button id="resumen-anterior" class="flecha" aria-label="Semana anterior">‹</button>
+      <h1 id="resumen-semana">Esta semana</h1>
+      <button id="resumen-siguiente" class="flecha" aria-label="Semana siguiente">›</button>
+    </header>
+    <div id="resumen-semanal"></div>
+  </section>
+
+  <!-- ============ MENÚ DE ABAJO ============ -->
+  <!-- Los íconos son dibujos SVG hechos con líneas simples -->
+  <nav id="menu" class="menu">
+    <button data-ir="pantalla-inicio">
+      <svg viewBox="0 0 24 24"><path d="M6 7v10M3 10v4M18 7v10M21 10v4M6 12h12"/></svg>
+      <span>Entrenar</span>
+    </button>
+    <button data-ir="pantalla-historial">
+      <svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>
+      <span>Historial</span>
+    </button>
+    <button data-ir="pantalla-progreso">
+      <svg viewBox="0 0 24 24"><path d="M4 19h16M5 15l4-4 4 3 6-7"/></svg>
+      <span>Progreso</span>
+    </button>
+    <button data-ir="pantalla-comida">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="14" r="7"/><path d="M12 7c0-2 1.5-4 4-4"/></svg>
+      <span>Comida</span>
+    </button>
+    <button data-ir="pantalla-peso">
+      <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 11a3.5 3.5 0 0 1 7 0M12 11l1.5-2"/></svg>
+      <span>Peso</span>
+    </button>
+    <button data-ir="pantalla-semana">
+      <svg viewBox="0 0 24 24"><path d="M5 20V12M10 20V6M15 20v-9M20 20V9"/></svg>
+      <span>Resumen</span>
+    </button>
+  </nav>
+
+  <!-- ============ VENTANA: AGREGAR / EDITAR ALIMENTO ============ -->
+  <dialog id="ventana-alimento" class="ventana">
+    <div class="ventana-contenido">
+      <h2 id="va-titulo">Otro alimento</h2>
+      <label class="campo">Nombre
+        <input id="va-nombre" type="text" placeholder="Ej: Yogur griego">
+      </label>
+      <label class="campo">Porción
+        <input id="va-porcion" type="text" placeholder="Ej: 1 vaso (200 g)">
+      </label>
+      <div class="campos-2">
+        <label class="campo">Calorías (kcal)
+          <input id="va-kcal" inputmode="decimal" placeholder="0">
+        </label>
+        <label class="campo">Proteína (g)
+          <input id="va-proteina" inputmode="decimal" placeholder="0">
+        </label>
+      </div>
+      <label class="check" id="va-guardar-fila">
+        <input type="checkbox" id="va-guardar"> Guardar también en mi lista rápida
+      </label>
+      <button id="va-ok" class="btn btn-primario btn-ancho">Agregar</button>
+      <button id="va-borrar" class="btn-texto">Quitar de la lista</button>
+      <button id="va-cancelar" class="btn-texto btn-gris">Cancelar</button>
+    </div>
+  </dialog>
+
+  <!-- ============ VENTANA: MÚSCULOS EN GRANDE ============ -->
+  <dialog id="ventana-musculos" class="ventana">
+    <div class="ventana-contenido">
+      <h2 id="vm-titulo"></h2>
+      <div id="vm-ejercicio"></div>
+      <div id="vm-cuerpo"></div>
+      <div class="leyenda">
+        <span><i class="muestra m-principal"></i>Principal</span>
+        <span><i class="muestra m-secundario"></i>Secundario</span>
+      </div>
+      <p id="vm-lista"></p>
+      <button id="vm-cerrar" class="btn btn-primario btn-ancho">Cerrar</button>
+    </div>
+  </dialog>
+
+  <!-- ============ TEMPORIZADOR DE DESCANSO (barra de abajo) ============ -->
+  <div id="temporizador" class="temporizador" hidden>
+    <div class="temp-barra"><div id="temp-progreso"></div></div>
+    <div class="temp-fila">
+      <button id="temp-menos">−15</button>
+      <div class="temp-centro">
+        <span id="temp-etiqueta">Descanso</span>
+        <strong id="temp-tiempo">2:00</strong>
+      </div>
+      <button id="temp-mas">+15</button>
+      <button id="temp-saltar">Saltar</button>
+    </div>
+  </div>
+
+  <!-- El orden importa: cada archivo usa cosas de los anteriores -->
+  <script src="js/rutina.js"></script>
+  <script src="js/datos.js"></script>
+  <script src="js/progresion.js"></script>
+  <script src="js/grafico.js"></script>
+  <script src="js/musculos.js"></script>
+  <script src="js/dibujos.js"></script>
+  <script src="js/temporizador.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/historial.js"></script>
+  <script src="js/peso.js"></script>
+  <script src="js/comida.js"></script>
+  <script src="js/calorias.js"></script>
+  <script src="js/resumen.js"></script>
+  <script src="js/copia.js"></script>
+  <script src="js/arranque.js"></script>
+</body>
+</html>
