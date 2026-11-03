@@ -364,6 +364,7 @@ $('#btn-terminar').addEventListener('click', () => {
     dia: sesion.dia,
     inicio: sesion.inicio,
     fin: new Date().toISOString(),
+    caminata: caminataPorDefecto(), // tus minutos de ida y vuelta de siempre (los cambias en el resumen)
     ejercicios: sesion.ejercicios
       .map((ej) => ({
         id: ej.id,
@@ -420,7 +421,7 @@ function pintarResumen(sesion) {
       </div>`).join('')}`;
 }
 
-// Marcar/desmarcar "Fui caminando" recalcula las calorías.
+// Cambiar los minutos de caminata recalcula las calorías.
 $('#resumen-contenido').addEventListener('change', (evento) => {
   if (!evento.target.matches('[data-caminata]') || !cambiarCaminata(evento.target)) return;
   pintarResumen(datos.sesiones.find((s) => s.id === evento.target.dataset.caminata));

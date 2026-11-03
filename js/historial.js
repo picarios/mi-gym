@@ -50,7 +50,7 @@ $('#lista-historial').addEventListener('click', (evento) => {
   pintarHistorial();
 });
 
-// Cambiar la casilla de caminata: se redibuja y dejamos abierta esa sesión.
+// Cambiar los minutos de caminata: se redibuja y dejamos abierta esa sesión.
 $('#lista-historial').addEventListener('change', (evento) => {
   if (!evento.target.matches('[data-caminata]') || !cambiarCaminata(evento.target)) return;
   const id = evento.target.dataset.caminata;
